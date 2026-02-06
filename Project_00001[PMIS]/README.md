@@ -69,5 +69,10 @@ pre-commit run --all-files
 
 ## Notes
 
-- This repo contains scaffolding and "hello world" endpoints only.
-- Add business logic to `apps/api/app/routes.py`, `apps/worker/worker.py`, and `apps/web/pages/`.
+- This repo contains scaffolding and sample business logic for:
+  - **API**: `POST /api/tasks` — submit async tasks to worker
+  - **API**: `GET /api/tasks/{task_id}` — check task status
+  - **Worker**: `process_task()` — demo task that processes data and returns result
+  - **Web**: Task submission & status UI (demo)
+- Docker Compose auto-builds on `docker compose up`
+- Dev overrides enable bind-mounts for hot-reload
