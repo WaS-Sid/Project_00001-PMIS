@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "pmis-api"
+version = "0.1.0"
+description = "PMIS API (FastAPI)"
+authors = ["dev <dev@example.com>"]
+packages = [
+  { include = "app" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.95.0"
+uvicorn = { extras = ["standard"], version = "^0.22.0" }
+
+[tool.poetry.dev-dependencies]
+black = "^24.1.0"
+ruff = "^0.14.1"
+mypy = "^1.5.1"
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"

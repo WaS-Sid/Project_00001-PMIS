@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    volumes:
+      - ../apps/api:/app:cached
+      - ../apps/common:/app/common:cached
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - '8000:8000'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ../apps/worker
+      dockerfile: Dockerfile
+    volumes:
+      - ../apps/worker:/app:cached
+      - ../apps/common:/app/common:cached
+    command: celery -A worker.celery_app worker --loglevel=info
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CELERY_BROKER=redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pmis-worker"
+version = "0.1.0"
+description = "PMIS Celery worker"
+authors = ["dev <dev@example.com>"]
+packages = [
+  { include = "worker" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+celery = "^5.3.0"
+
+[tool.poetry.dev-dependencies]
+ruff = "^0.14.1"
+black = "^24.1.0"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
