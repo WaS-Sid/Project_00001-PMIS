@@ -1,0 +1,59 @@
+name: Lint & Format Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  python-lint:
+    name: Python Lint (ruff + mypy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+
+      - name: Lint API (ruff)
+        working-directory: Project_00001[PMIS]/apps/api
+        run: poetry run ruff check .
+
+      - name: Type check API (mypy)
+        working-directory: Project_00001[PMIS]/apps/api
+        run: poetry run mypy . || true
+
+      - name: Lint Worker (ruff)
+        working-directory: Project_00001[PMIS]/apps/worker
+        run: poetry run ruff check .
+
+  javascript-lint:
+    name: JavaScript Lint (eslint + prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: Project_00001[PMIS]/apps/web
+        run: npm ci
+
+      - name: Lint (eslint)
+        working-directory: Project_00001[PMIS]/apps/web
+        run: npm run lint
+
+      - name: Check formatting (prettier)
+        working-directory: Project_00001[PMIS]/apps/web
+        run: npx prettier --check .
