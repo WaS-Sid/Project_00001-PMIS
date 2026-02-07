@@ -9,6 +9,11 @@ from .write_tools import (
     append_event, create_task, propose_package_patch, approve_proposal
 )
 from .memory_tools import store_memory, search_memory
+from .ops_orchestrator import (
+    open_incident, update_incident, execute_runbook, toggle_service_mode,
+    query_metrics, query_logs, query_traces, db_read_admin, ticket_admin,
+    upload_object, get_object_artifacts, propose_docs_change, create_postmortem,
+)
 
 __all__ = [
     # Models
@@ -22,4 +27,8 @@ __all__ = [
     "append_event", "create_task", "propose_package_patch", "approve_proposal",
     # Memory tools
     "store_memory", "search_memory",
+    # Orchestrator / OpsBot helpers
+    "open_incident", "update_incident", "execute_runbook", "toggle_service_mode",
+    "query_metrics", "query_logs", "query_traces", "db_read_admin", "ticket_admin",
+    "upload_object", "get_object_artifacts", "propose_docs_change", "create_postmortem",
 ]

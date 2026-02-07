@@ -1,7 +1,19 @@
+"""
+Database configuration for Celery worker.
+Mirrors app/database.py for consistent DB access.
+"""
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from .tools.models import Base
+
+# Import models from API app
+# The worker and API share the same DB schema
+try:
+    from app.tools.models import Base
+except ImportError:
+    # Fallback: define Base locally if app not available
+    from sqlalchemy.ext.declarative import declarative_base
+    Base = declarative_base()
 
 # Database URL from environment or default to SQLite
 DATABASE_URL = os.getenv(
@@ -21,13 +33,9 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def get_db():
-    """Dependency for FastAPI to get DB session."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+def get_db() -> Session:
+    """Get a database session."""
+    return SessionLocal()
 
 
 def init_db():
